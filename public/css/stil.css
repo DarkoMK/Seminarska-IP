@@ -1,0 +1,152 @@
+body{
+    background-image: url("../images/bg/pozadina.bmp");
+    background-repeat: repeat;
+    font-size: 100%;
+}
+.navdesktop{
+    float: none;
+  	clear: both; 
+  /*	background: #000;*/
+  	opacity: 0.7;
+  	bottom: 0;
+  	top: 0;
+  	left: 0;
+  	height: 100%;
+  	position: absolute;
+}
+.navdesktop ul{
+    list-style: none;
+  	margin: 0px;
+  	padding: 0px;
+}
+.navdesktop li{
+    padding-top: 100%;
+    float: none;
+  	width: 100%;
+}
+.navdesktop li a{
+    display: block; 
+    width: 100%; 
+    border-left: 1px solid; 
+    position: relative; 
+    z-index: 2;
+    text-decoration: none;
+    color: #444;
+    box-sizing: border-box;  
+    -moz-box-sizing: border-box;  
+    -webkit-box-sizing: border-box; 
+}
+
+.navdesktop li a:after { 
+    content: "";
+    height: 100%; 
+    left: 0; 
+    top: 0; 
+    width: 0px;  
+    position: absolute; 
+    transition: all 0.3s ease 0s; 
+    -webkit-transition: all 0.3s ease 0s; 
+    z-index: -1;
+}
+
+.navdesktop li a:hover:after{ width: 100%; }
+.navdesktop li:first-child a:after{ background: #000; opacity: 0.2;}
+.navdesktop li:nth-child(2) a:after{ background: #000; opacity: 0.2;}
+.navdesktop li:nth-child(3) a:after{ background: #000; opacity: 0.2;}
+.navdesktop li:last-child a:after{ background: #000; opacity: 0.2;}
+
+.navdesktop li i{
+  	color: #ffffff;
+  	font-size: 6em;
+}
+.navdesktop p{
+    color: #fff;
+}
+
+@media screen and (max-width: 1100px) {
+	.navdesktop li i{
+  	color: #ffffff;
+  	font-size: 5em;
+	}
+}
+
+.navmobilna{
+    float: none;
+  	clear: both; 
+  	background: #000;
+  	opacity: 0.7;
+  	right: 0;
+  	top: 0;
+  	left: 0;
+  	height: 6em;
+  	position: absolute;
+  	text-align: center;
+}
+
+.navmobilna li a{
+    display: block; 
+    width: 100%; 
+    border-top: 1px solid; 
+    position: relative; 
+    z-index: 2;
+    text-decoration: none;
+    color: #444;
+    box-sizing: border-box;  
+    -moz-box-sizing: border-box;  
+    -webkit-box-sizing: border-box; 
+}
+
+.navmobilna li{
+  	display: inline-block;
+  	margin: 0 auto;
+  	padding: 0 1em 1em 1em;
+}
+.navmobilna i{
+  	color: #ffffff;
+  	font-size: 4.8em;
+}
+
+.navmobilna li a:after { 
+    content: "";
+    height: 100%; 
+    left: 0; 
+    top: 0; 
+    width: 0px;  
+    position: absolute; 
+    transition: all 0.3s ease 0s; 
+    -webkit-transition: all 0.3s ease 0s; 
+    z-index: -1;
+}
+
+.navmobilna li a:hover:after{ width: 100%; }
+.navmobilna li:first-child a:after{ background: #fff; opacity: 0.2;}
+.navmobilna li:nth-child(2) a:after{ background: #fff; opacity: 0.2;}
+.navmobilna li:nth-child(3) a:after{ background: #fff; opacity: 0.2;}
+.navmobilna li:last-child a:after{ background: #fff; opacity: 0.2;}
+
+
+@font-face {
+    font-family: CourierNew;
+    src: url(../fonts/cour.ttf);
+}
+
+p, h1{
+    font-family: "CourierNew";
+    color: #fff;
+}
+
+p{
+    font-size: 22px;
+}
+
+h1{
+    font-size: 44px;
+}
+
+hr{
+    display: block;
+    height: 2px;
+    border: 0;
+    border-top: 2px solid #fff;
+    padding: 0; 
+}

@@ -21,3 +21,5 @@ Route::get('/pocetna', 'PocetnaController@index');
 Route::get('/naredbi', 'NaredbiController@index');
 Route::get('/pomos', 'PomosController@index');
 Route::get('/podesuvanja', 'PodesuvanjaController@index');
+Route::get('/korisnici', 'KorisniciController@index');
+Route::get('/kukji', 'KukjiController@index');

@@ -15,17 +15,18 @@ class PocetnaController extends Controller
     }
     public function index()
     {
-        $userid = Auth::user()->id;
-        $uredi = Ured::join('kukja', 'ured.id_kukja', '=', 'kukja.id')
-            ->join('kukja_korisnik', 'kukja.id', '=', 'kukja_korisnik.id_kukja')
-            ->join('users', 'users.id', '=', 'kukja_korisnik.id_korisnik')
-            ->join('kategorija', 'kategorija.id', '=', 'ured.id_kategorija')
-            ->join('soba', 'soba.id', '=', 'ured.id_soba')
-            ->select('ured.id', 'ured.ime', 'soba.ime', 'kategorija.vid_na_ured', 'kategorija.mokjnost_vati', 'ured.vklucena_sostojba', 'ured.br_izvod')
-            ->where('users.id', $userid)
-            ->get();
-       // dd($uredi);
+        if (Auth::user()->IsAdmin())
+            return redirect('/korisnici');
         $title = 'Vkluci.MK - Почетна';
-        return view('pocetna', compact('title', 'uredi'));
+            $userid = Auth::user()->id;
+            $uredi = Ured::join('kukja', 'ured.id_kukja', '=', 'kukja.id')
+                ->join('kukja_korisnik', 'kukja.id', '=', 'kukja_korisnik.id_kukja')
+                ->join('users', 'users.id', '=', 'kukja_korisnik.id_korisnik')
+                ->join('kategorija', 'kategorija.id', '=', 'ured.id_kategorija')
+                ->join('soba', 'soba.id', '=', 'ured.id_soba')
+                ->select('ured.id', 'ured.ime', 'soba.ime', 'kategorija.vid_na_ured', 'kategorija.mokjnost_vati', 'ured.vklucena_sostojba', 'ured.br_izvod')
+                ->where('users.id', $userid)
+                ->get();
+            return view('pocetna', compact('title', 'uredi'));
     }
 }

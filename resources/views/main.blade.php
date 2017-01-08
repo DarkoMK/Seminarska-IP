@@ -11,7 +11,7 @@
                   @if (!Auth::guest())
                       <a href="{{ url('/logout') }}"
                          onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" class="waves-effect waves-light btn right  brown lighten-2">
+                                                     document.getElementById('logout-form').submit();" class="waves-effect waves-light btn right brown lighten-2">
                           <i class="material-icons left">lock_outline</i> Одјава
                       </a>
 

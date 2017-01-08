@@ -13,6 +13,11 @@ class Ured extends Model
         return $this->belongsTo('App\Kukja', 'id_kukja');
     }
 
+    public function naredbi()
+    {
+        return $this->hasMany('App\Naredbi', 'id_ured');
+    }
+
     public function kategorija() {
         return $this->belongsTo('App\Kategorija', 'id_kategorija');
     }

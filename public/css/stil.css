@@ -130,7 +130,7 @@ body{
     src: url(../fonts/cour.ttf);
 }
 
-p, h1{
+p, h1, h4{
     font-family: "CourierNew";
     color: #fff;
 }

@@ -7,9 +7,9 @@
     <table class="bordered responsive-table">
         <thead>
         <tr>
-            <th data-field="ime"><p>Име</p></th>
-            <th data-field="email"><p>Бр. Уреди</p></th>
-            <th data-field="akcija"><p>Акција</p></th>
+            <th data-field="ime">Име</th>
+            <th data-field="email">Бр. Уреди</th>
+            <th data-field="akcija">Акција</th>
         </tr>
         </thead>
         <tbody>

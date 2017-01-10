@@ -6,7 +6,7 @@
       <div class="col s12 m11 l11">
           <div class="container right">
             <div style="margin-top: 6em;" class="hide-on-med-and-up"></div>
-              <div id="grid-container" class="section scrollspy">
+              <div id="responsive" class="section scrollspy">
               <!-- Page Content goes here -->
                   @if (!Auth::guest())
                       <a href="{{ url('/logout') }}"

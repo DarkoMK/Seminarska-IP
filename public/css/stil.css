@@ -130,12 +130,12 @@ body{
     src: url(../fonts/cour.ttf);
 }
 
-p, h1, h4, td{
+p, h1, h4, td, th{
     font-family: "CourierNew";
     color: #fff;
 }
 
-p{
+p, th{
     font-size: 22px;
 }
 
@@ -149,4 +149,8 @@ hr{
     border: 0;
     border-top: 2px solid #fff;
     padding: 0; 
+}
+
+.card{
+    background-color:#795548;
 }

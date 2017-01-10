@@ -52,7 +52,7 @@
                             @if (count($errors) > 0)
                               <div class="col s12">
                                 @foreach($errors->all() as $error)
-                                <p class="center" style="color: #ffe0b2;">{{ $error }}</p>
+                                <p class="center card" style="color: #ffe0b2;">{{ $error }}</p>
                                 @endforeach
                               </div>
                             @endif

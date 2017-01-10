@@ -23,3 +23,9 @@ Route::get('/pomos', 'PomosController@index');
 Route::get('/podesuvanja', 'PodesuvanjaController@index');
 Route::get('/korisnici', 'KorisniciController@index');
 Route::get('/kukji', 'KukjiController@index');
+
+Route::get('/naredbi/ured/vklucen/{id_ured}', 'NaredbiController@getUredStatusVK');
+Route::get('/naredbi/ured/isklucen/{id_ured}', 'NaredbiController@getUredStatusISK');
+
+Route::post('/naredbi/ured/vkluci', 'NaredbiController@vkluciUred');
+Route::post('/naredbi/ured/iskluci', 'NaredbiController@iskluciUred');

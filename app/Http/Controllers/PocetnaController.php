@@ -17,6 +17,7 @@ class PocetnaController extends Controller
     {
         if (Auth::user()->IsAdmin())
             return redirect('/korisnici');
+
         $title = 'Vkluci.MK - Почетна';
             $userid = Auth::user()->id;
             $uredi = Ured::join('kukja', 'ured.id_kukja', '=', 'kukja.id')

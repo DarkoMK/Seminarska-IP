@@ -2,7 +2,9 @@
 
 @section('main')
     <br>
+    <div id="listdev">
                 <h1 style="margin-left: 15%"><span class="icon"><i  aria-hidden="true" class="icon-sijalica" title="Моите уреди"></i></span>Моите уреди</h1>
+
                 @php ($p = false)
                 @foreach($uredi as $ured)
                     @if($p)
@@ -20,23 +22,29 @@
                             <p style="font-size: 1em;">{{ $ured->mokjnost_vati }}W<br>Извод: {{ $ured->br_izvod }}</p>
                         </div>
                     </div>
-                    <div class="col l3">
-                        @if($ured->vklucena_sostojba)
-                            <img src="/images/p_on.png" alt="Вклучен">
-                        @else
-                            <img src="/images/p_off.png" alt="Исклучен">
-                        @endif
-                    </div>
-                    <div class="col l5">
-                        <div style="text-align: left">
-                            <p style="font-size: 1em;">Вклучено од Дарко<br>на 08.01.2017 во 18:30</p>
-                            <p style="font-size: 1em;">Ќе се исклучи на<br>08.02.2017 во 18:30, од Дарко</p>
-                        </div>
-                    </div>
+                            <infoblock :devid="{{ $ured->id }}"></infoblock>
                 </div>
                 @if($p) @php ($p = false)
                 @else @php ($p = true)
                 @endif
                 @endforeach
                 <hr>
+    </div>
+            <!--<a @click="getDevInfo(2)">dark</a>-->
+                                <template id="devinfoblock-template">
+                                    <div>
+                                        <div class="col l3">
+                                            <a v-if="u_status" href="#" @click.prevent="changeStatus()"><img src="/images/p_on.png" alt="Вклучен"></a>
+                                            <a v-if="!u_status" href="#" @click.prevent="changeStatus()"><img src="/images/p_off.png" alt="Исклучен"></a>
+                                        </div>
+                                        <div class="col l5">
+                                            <div style="text-align: left">
+                                                <p v-if="u_status && v_vreme_vklucuvanje && !v_idno" style="font-size: 1em;">Вклучено од @{{ v_ime }} <br>на @{{ v_vreme_vklucuvanje }}</p>
+                                                <p v-if="!u_status && i_vreme_isklucuvanje && !i_idno" style="font-size: 1em;">Исклучено од @{{ i_ime }} <br>на @{{ i_vreme_isklucuvanje }}</p>
+                                                <p v-if="!u_status && v_idno" style="font-size: 1em;">Ќе се вклучи на<br> @{{ v_vreme_vklucuvanje }}, од @{{ v_ime }}</p>
+                                                <p v-if="u_status && i_idno" style="font-size: 1em;">Ќе се исклучи на<br> @{{ i_vreme_isklucuvanje }}, од @{{ i_ime }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
 @endsection

@@ -1,23 +1,24 @@
 $(document).ready(function() {
     $('select').material_select();
-});
-$('.datepicker').pickadate({
-    selectMonths: true,
-    selectYears: 1,
-    today: 'Денес',
-    clear: 'Исчисти',
-    close: 'ОК',
-    monthsFull: ['Јануари', 'Февруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'],
-    monthsShort: ['Јан', 'Феб', 'Мар', 'Апр', 'Мај', 'Јун', 'Јул', 'Авг', 'Сеп', 'Окт', 'Ное', 'Дек'],
-    weekdaysFull: ['Недела', 'Понеделник', 'Вторник', 'Среда', 'Четврток', 'Петок', 'Сабота'],
-    weekdaysShort: ['Нед', 'Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб']
-});
-$('.timepicker').pickatime({
-    default: 'now',
-    twelvehour: false, // change to 12 hour AM/PM clock from 24 hour
-    donetext: 'ОК',
-    autoclose: false,
-    vibrate: true // vibrate the device when dragging clock hand
+    $('.datepicker').pickadate({
+        selectMonths: true,
+        selectYears: 1,
+        today: 'Денес',
+        clear: 'Исчисти',
+        close: 'ОК',
+        monthsFull: ['Јануари', 'Февруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'],
+        monthsShort: ['Јан', 'Феб', 'Мар', 'Апр', 'Мај', 'Јун', 'Јул', 'Авг', 'Сеп', 'Окт', 'Ное', 'Дек'],
+        weekdaysFull: ['Недела', 'Понеделник', 'Вторник', 'Среда', 'Четврток', 'Петок', 'Сабота'],
+        weekdaysShort: ['Нед', 'Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб'],
+        formatSubmit: 'yyyy-mm-dd'
+    });
+    $('.timepicker').pickatime({
+        default: 'now',
+        twelvehour: false, // promeni vo 12 casoven AM/PM casovnik od 24 casoven
+        donetext: 'ОК',
+        autoclose: false,
+        vibrate: true // vibriraj go uredot koga se mesti saat
+    });
 });
 
 class Errors {
@@ -123,8 +124,6 @@ class Form {
     }
 
     onSuccess(data) {
-       // alert(data.message); // temporary
-
         this.reset();
     }
 
@@ -182,12 +181,14 @@ Vue.component('infoblock', {
                 if(!this.i_idno)
                     this.iskluciUred();
                 else
-                    alert("Постои наредба за исклучување во иднина. Најпрвин избришете ја.");
+                    Materialize.toast('Постои наредба за исклучување во иднина. Најпрвин избришете ја.', 4000)
+                    //alert("Постои наредба за исклучување во иднина. Најпрвин избришете ја.");
             else
                 if(!this.v_idno)
                     this.vkluciUred();
                 else
-                    alert("Постои наредба за вклучување во иднина. Најпрвин избришете ја.");
+                    Materialize.toast('Постои наредба за вклучување во иднина. Најпрвин избришете ја.', 4000)
+                    //alert("Постои наредба за вклучување во иднина. Најпрвин избришете ја.");
         },
         vkluciUred(){
             axios.post('/naredbi/ured/vkluci/', {
@@ -205,11 +206,107 @@ Vue.component('infoblock', {
 
         setInterval(function () {
             this.setInfo();
-        }.bind(this), 2000);
+        }.bind(this), 1000);
     }
 });
 
-new Vue({
+if(window.location.pathname == "/pocetna")
+    new Vue({
     el: '#listdev'
-});
+    });
+if(window.location.pathname == "/naredbi")
+    new Vue({
+        el: '#listnaredbi',
+        data:{
+            form: new Form(),
+            uredi: '',
+            naredbi: '',
+            dodaj: false,
+            edit: false,
+            naredba:[{
+                ured_id: null,
+                ured_ime: null,
+                d_vk: null,
+                t_vk: null,
+                d_isk: null,
+                t_isk: null
+            }],
+            serverTime: null,
+            timeStr: null
+        },
+        methods:{
+            getUredi(){
+                this.form.get('/naredbi/UserGetAllUredi').then(response => {
+                    if(response) {
+                        this.uredi = response;
+                        //console.log(this.uredi);
+                    }});
+            },
+            getNaredbi(){
+              this.form.get('/naredbi/UserGetAllNaredbi').then(response => {
+              if(response) {
+                  this.naredbi = response;
+              }});
+              this.getUredi();
+            },
+            editNaredba(){
+                //loadiraj view za naredba
+                this.edit = true;
+                this.dodaj = true;
+            },
+            zacuvajNaredba(){
+                this.naredba.d_vk = $("input[name=v_vklucuvanje_submit]").val();
+                this.naredba.t_vk = $("input[name=t_vklucuvanje]").val();
+                this.naredba.d_isk = $("input[name=v_isklucuvanje_submit]").val();
+                this.naredba.t_isk = $("input[name=t_isklucuvanje]").val();
 
+                if(this.naredba.ured_id){
+                if (this.naredba.d_vk){
+                    if(this.naredba.t_vk){
+                        this.timeStr = this.naredba.d_vk + ' ' + this.naredba.t_vk;
+                        if(this.timeStr > this.serverTime){
+                            //
+                            this.saveToDB();
+                        }else{
+                            Materialize.toast('Мора да е идна наредба!', 4000);
+                        }
+                    }else{
+                        Materialize.toast('Морате да изберете саат!', 4000);
+                    }
+                }else if(this.naredba.d_isk){
+                    if(this.naredba.t_isk){
+                        this.timeStr = this.naredba.d_isk + ' ' + this.naredba.t_isk;
+                        if(this.timeStr > this.serverTime){
+                            //
+                            this.saveToDB();
+                        }else{
+                            Materialize.toast('Мора да е идна наредба!', 4000);
+                        }
+                    }else{
+                        Materialize.toast('Морате да изберете саат!', 4000);
+                    }
+                }else{
+                    Materialize.toast('Морате да изберете нешто!', 4000);
+                }
+                }else{
+                    Materialize.toast('Морате да изберете уред!', 4000);
+                }
+            },
+            saveToDB(){
+                this.dodaj = false;
+                this.edit = false;
+                Materialize.toast('Наредбата е зачувана!', 4000);
+                this.getNaredbi();
+            },
+            setSrvTime(){
+                this.form.get('/naredbi/getServerTime').then(response => {
+                    if(response) {
+                        this.serverTime = response;
+                    }});
+            }
+        },
+        created: function () {
+            this.getNaredbi();
+            this.setSrvTime();
+        }
+    });

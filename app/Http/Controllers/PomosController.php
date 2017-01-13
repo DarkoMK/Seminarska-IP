@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pomos;
 use Illuminate\Http\Request;
 
 class PomosController extends Controller
@@ -13,6 +14,8 @@ class PomosController extends Controller
     }
     public function index()
     {
-        return view('pomos', ['title' => 'Vkluci.MK - Помош']);
+        $title = 'Vkluci.MK - Помош';
+        $pomos = Pomos::all();
+        return view('pomos', compact('title', 'pomos'));
     }
 }

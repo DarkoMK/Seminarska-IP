@@ -30,7 +30,6 @@
                 @endforeach
                 <hr>
     </div>
-            <!--<a @click="getDevInfo(2)">dark</a>-->
                                 <template id="devinfoblock-template">
                                     <div>
                                         <div class="col l3">

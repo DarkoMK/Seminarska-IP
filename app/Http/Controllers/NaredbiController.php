@@ -17,7 +17,8 @@ class NaredbiController extends Controller
     }
     public function index()
     {
-        return view('naredbi', ['title' => 'Vkluci.MK - Наредби']);
+        $title = 'Vkluci.MK - Наредби';
+        return view('naredbi', ['title' => $title]);
     }
 
     private function isOwner($id_ured){
@@ -77,5 +78,29 @@ class NaredbiController extends Controller
         }else{
             abort(403, 'Недозволена акција!');
         }
+    }
+
+    public function getUserNaredbi(){
+        $userid = Auth::user()->id;
+        $current_time = Carbon::now();
+        $naredbi = Naredbi::where('id_korisnik', $userid)->where('na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured', 'ured.soba')->get();
+        return $naredbi;
+    }
+
+    public function getUserUredi(){
+        $userid = Auth::user()->id;
+        $uredi = Ured::join('kukja', 'ured.id_kukja', '=', 'kukja.id')
+            ->join('kukja_korisnik', 'kukja.id', '=', 'kukja_korisnik.id_kukja')
+            ->join('users', 'users.id', '=', 'kukja_korisnik.id_korisnik')
+            ->join('soba', 'soba.id', '=', 'ured.id_soba')
+            ->select('ured.id', 'ured.ime as iured', 'soba.ime as isoba')
+            ->where('users.id', $userid)
+            ->get();
+        return $uredi;
+    }
+
+    public function getServerTime(){
+        $current_time = Carbon::now();
+        return $current_time;
     }
 }

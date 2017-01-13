@@ -29,3 +29,7 @@ Route::get('/naredbi/ured/isklucen/{id_ured}', 'NaredbiController@getUredStatusI
 
 Route::post('/naredbi/ured/vkluci', 'NaredbiController@vkluciUred');
 Route::post('/naredbi/ured/iskluci', 'NaredbiController@iskluciUred');
+
+Route::get('/naredbi/UserGetAllNaredbi', 'NaredbiController@getUserNaredbi');
+Route::get('/naredbi/UserGetAllUredi', 'NaredbiController@getUserUredi');
+Route::get('/naredbi/getServerTime', 'NaredbiController@getServerTime');

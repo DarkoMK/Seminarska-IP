@@ -33,3 +33,7 @@ Route::post('/naredbi/ured/iskluci', 'NaredbiController@iskluciUred');
 Route::get('/naredbi/UserGetAllNaredbi', 'NaredbiController@getUserNaredbi');
 Route::get('/naredbi/UserGetAllUredi', 'NaredbiController@getUserUredi');
 Route::get('/naredbi/getServerTime', 'NaredbiController@getServerTime');
+
+Route::post('/naredbi/nova', 'NaredbiController@vnesiNaredba');
+Route::post('/naredbi/izbrisi', 'NaredbiController@izbrisiNaredba');
+Route::post('/naredbi/edit', 'NaredbiController@editNaredba');

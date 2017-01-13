@@ -177,18 +177,23 @@ Vue.component('infoblock', {
             });
         },
         changeStatus: function () {
-            if(this.u_status)
-                if(!this.i_idno)
+            if (this.u_status){
+                if (!this.i_idno) {
                     this.iskluciUred();
-                else
+                    Materialize.toast('Уредот е исклучен!', 4000);
+                }else{
                     Materialize.toast('Постои наредба за исклучување во иднина. Најпрвин избришете ја.', 4000)
                     //alert("Постои наредба за исклучување во иднина. Најпрвин избришете ја.");
-            else
-                if(!this.v_idno)
+                    }
+            }
+            else {
+                if (!this.v_idno) {
                     this.vkluciUred();
-                else
+                    Materialize.toast('Уредот е вклучен!', 4000);
+                } else
                     Materialize.toast('Постои наредба за вклучување во иднина. Најпрвин избришете ја.', 4000)
-                    //alert("Постои наредба за вклучување во иднина. Најпрвин избришете ја.");
+                //alert("Постои наредба за вклучување во иднина. Најпрвин избришете ја.");
+            }
         },
         vkluciUred(){
             axios.post('/naredbi/ured/vkluci/', {
@@ -232,7 +237,9 @@ if(window.location.pathname == "/naredbi")
                 t_isk: null
             }],
             serverTime: null,
-            timeStr: null
+            timeStrv: null,
+            timeStri: null,
+            nar_id: null
         },
         methods:{
             getUredi(){
@@ -249,42 +256,49 @@ if(window.location.pathname == "/naredbi")
               }});
               this.getUredi();
             },
-            editNaredba(){
-                //loadiraj view za naredba
+            editNaredba(id_naredba, id_ured, vreme_vklucuvanje, vreme_isklucuvanje){
+                this.naredba.ured_id = id_ured;
+                this.nar_id = id_naredba;
+                var vk = vreme_vklucuvanje.split(' ');
+                var vi = vreme_isklucuvanje.split(' ');
+                $("input[name=v_vklucuvanje_submit]").val(vk[0]);
+                $("input[name=v_vklucuvanje]").val(vk[0]);
+                $("input[name=t_vklucuvanje]").val(vk[1]);
+                $("input[name=v_isklucuvanje_submit]").val(vi[0]);
+                $("input[name=v_isklucuvanje]").val(vi[0]);
+                $("input[name=t_isklucuvanje]").val(vi[1]);
+
                 this.edit = true;
                 this.dodaj = true;
             },
             zacuvajNaredba(){
+
                 this.naredba.d_vk = $("input[name=v_vklucuvanje_submit]").val();
                 this.naredba.t_vk = $("input[name=t_vklucuvanje]").val();
                 this.naredba.d_isk = $("input[name=v_isklucuvanje_submit]").val();
                 this.naredba.t_isk = $("input[name=t_isklucuvanje]").val();
 
                 if(this.naredba.ured_id){
-                if (this.naredba.d_vk){
-                    if(this.naredba.t_vk){
-                        this.timeStr = this.naredba.d_vk + ' ' + this.naredba.t_vk;
-                        if(this.timeStr > this.serverTime){
-                            //
-                            this.saveToDB();
+                if ((this.naredba.d_vk && this.naredba.t_vk) || (this.naredba.d_isk && this.naredba.t_isk)){
+                        this.timeStrv = this.naredba.d_vk + ' ' + this.naredba.t_vk;
+                        this.timeStri = this.naredba.d_isk + ' ' + this.naredba.t_isk;
+                        if((this.timeStrv > this.serverTime) || (this.timeStri > this.serverTime)) {
+                            if (!(this.timeStrv > this.serverTime)) {
+                                Materialize.toast('Вклучувањето не е во иднина. Ќе се игнорира.', 4000);
+                                this.timeStrv = null;
+                            }
+                            if (!(this.timeStri > this.serverTime)) {
+                                Materialize.toast('Исклучувањето не е во иднина. Ќе се игнорира.', 4000);
+                                this.timeStri = null;
+                            }
+                            if(this.edit)
+                                this.saveEditToDB();
+                            else
+                                this.saveToDB();
                         }else{
-                            Materialize.toast('Мора да е идна наредба!', 4000);
+                            Materialize.toast('Мора да е идно време!', 4000);
                         }
-                    }else{
-                        Materialize.toast('Морате да изберете саат!', 4000);
-                    }
-                }else if(this.naredba.d_isk){
-                    if(this.naredba.t_isk){
-                        this.timeStr = this.naredba.d_isk + ' ' + this.naredba.t_isk;
-                        if(this.timeStr > this.serverTime){
-                            //
-                            this.saveToDB();
-                        }else{
-                            Materialize.toast('Мора да е идна наредба!', 4000);
-                        }
-                    }else{
-                        Materialize.toast('Морате да изберете саат!', 4000);
-                    }
+
                 }else{
                     Materialize.toast('Морате да изберете нешто!', 4000);
                 }
@@ -295,14 +309,48 @@ if(window.location.pathname == "/naredbi")
             saveToDB(){
                 this.dodaj = false;
                 this.edit = false;
+                axios.post('/naredbi/nova/', {
+                    id_ured: this.naredba.ured_id,
+                    timeStrv: this.timeStrv,
+                    timeStri: this.timeStri
+                });
                 Materialize.toast('Наредбата е зачувана!', 4000);
                 this.getNaredbi();
+                this.resetForm();
+            },
+            saveEditToDB(){
+                this.dodaj = false;
+                this.edit = false;
+                axios.post('/naredbi/edit/', {
+                    id_naredba: this.nar_id,
+                    id_ured: this.naredba.ured_id,
+                    timeStrv: this.timeStrv,
+                    timeStri: this.timeStri
+                });
+                Materialize.toast('Наредбата е изменета!', 4000);
+                this.getNaredbi();
+                this.resetForm();
             },
             setSrvTime(){
                 this.form.get('/naredbi/getServerTime').then(response => {
                     if(response) {
                         this.serverTime = response;
                     }});
+            },
+            resetForm(){
+                $("input[name=v_vklucuvanje_submit]").val('');
+                $("input[name=v_vklucuvanje]").val('');
+                $("input[name=t_vklucuvanje]").val('');
+                $("input[name=v_isklucuvanje_submit]").val('');
+                $("input[name=v_isklucuvanje]").val('');
+                $("input[name=t_isklucuvanje]").val('');
+            },
+            izbrisiNaredba(id_naredba, id_ured){
+                axios.post('/naredbi/izbrisi', {
+                    id_ured: id_ured,
+                    naredba_id: id_naredba
+                });
+                this.getNaredbi();
             }
         },
         created: function () {

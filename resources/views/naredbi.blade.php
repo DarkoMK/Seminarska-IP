@@ -42,6 +42,7 @@
             </div>
             <div class="row">
                 <a href="#" class="waves-effect waves-light btn brown" @click.prevent="zacuvajNaredba()"><i class="material-icons right">query_builder</i>Зачувај наредба</a>
+                <a href="#" class="waves-effect waves-light btn brown" @click.prevent="resetForm()"><i class="material-icons right">clear_all</i>Ресетирај</a>
             </div>
         </form>
     <p>----------------------</p>
@@ -69,8 +70,8 @@
                 <td v-if="nar.vreme_isklucuvanje">@{{ nar.vreme_isklucuvanje }}</td>
                 <td v-else>Нема</td>
                 <td>
-                    <a class="waves-effect waves-light btn brown darken-4" @click.prevent="editNaredba()"><i class="material-icons">mode_edit</i></a>
-                    <a class="waves-effect waves-light btn brown darken-4" @click.prevent="editNaredba()"><i class="material-icons">delete</i></a>
+                    <a class="waves-effect waves-light btn brown darken-4" @click.prevent="editNaredba(nar.id, nar.id_ured, nar.vreme_vklucuvanje, nar.vreme_isklucuvanje)"><i class="material-icons">mode_edit</i></a>
+                    <a class="waves-effect waves-light btn brown darken-4" @click.prevent="izbrisiNaredba(nar.id, nar.id_ured)"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
 

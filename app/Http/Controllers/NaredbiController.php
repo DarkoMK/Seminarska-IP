@@ -103,4 +103,44 @@ class NaredbiController extends Controller
         $current_time = Carbon::now();
         return $current_time;
     }
+
+    public function vnesiNaredba(){
+        $id_ured = request('id_ured');
+        if ($this->isOwner($id_ured)){
+            $naredba = new Naredbi();
+            $naredba->id_ured = $id_ured;
+            $naredba->id_korisnik = Auth::user()->id;
+            $naredba->na_tajmer = 1;
+            $naredba->vreme_vklucuvanje = request('timeStrv');
+            $naredba->vreme_isklucuvanje =request('timeStri');
+            $naredba->save();
+        }else{
+            abort(403, 'Недозволена акција!');
+        }
+    }
+
+    public function editNaredba(){
+        $id_ured = request('id_ured');
+        if ($this->isOwner($id_ured)){
+            $naredba = Naredbi::find(request('id_naredba'));
+            $naredba->id_ured = $id_ured;
+            $naredba->id_korisnik = Auth::user()->id;
+            $naredba->na_tajmer = 1;
+            $naredba->vreme_vklucuvanje = request('timeStrv');
+            $naredba->vreme_isklucuvanje =request('timeStri');
+            $naredba->save();
+        }else{
+            abort(403, 'Недозволена акција!');
+        }
+    }
+
+    public function izbrisiNaredba(){
+        $id_ured = request('id_ured');
+        $naredba_id = request('naredba_id');
+        if ($this->isOwner($id_ured)){
+            Naredbi::find($naredba_id)->delete();
+        }else{
+            abort(403, 'Недозволена акција!');
+        }
+    }
 }

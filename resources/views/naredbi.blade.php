@@ -21,22 +21,22 @@
             </div>
             <div class="row">
                 <div class="input-field col m6 l6">
-                    <input type="date" class="datepicker" id="v_vklucuvanje" name="v_vklucuvanje">
+                    <input placeholder="" type="date" class="datepicker" id="v_vklucuvanje" name="v_vklucuvanje">
                     <label for="v_vklucuvanje">Датум на вклучување</label>
                 </div>
 
                 <div class="input-field col m6 l6">
-                    <input type="time" class="timepicker" id="t_vklucuvanje" name="t_vklucuvanje">
+                    <input placeholder="" type="time" class="timepicker" id="t_vklucuvanje" name="t_vklucuvanje">
                     <label for="t_vklucuvanje">Час на вклучување</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col m6 l6">
-                    <input type="date" class="datepicker" id="v_isklucuvanje" name="v_isklucuvanje">
+                    <input placeholder="" type="date" class="datepicker" id="v_isklucuvanje" name="v_isklucuvanje">
                     <label for="v_isklucuvanje">Датум на исклучување</label>
                 </div>
                 <div class="input-field col m6 l6">
-                    <input type="time" class="timepicker" id="t_isklucuvanje" name="t_isklucuvanje">
+                    <input placeholder="" type="time" class="timepicker" id="t_isklucuvanje" name="t_isklucuvanje">
                     <label for="t_isklucuvanje">Час на исклучување</label>
                 </div>
             </div>

@@ -37,3 +37,12 @@ Route::get('/naredbi/getServerTime', 'NaredbiController@getServerTime');
 Route::post('/naredbi/nova', 'NaredbiController@vnesiNaredba');
 Route::post('/naredbi/izbrisi', 'NaredbiController@izbrisiNaredba');
 Route::post('/naredbi/edit', 'NaredbiController@editNaredba');
+
+Route::post('/korisnik/promeniLozinka', 'UserController@promeniLozinka');
+
+Route::get('/korisnici/UserGetAllKorisnici', 'KorisniciController@getUserKorisnici');
+Route::get('/korisnici/UserExists/{kemail}', 'KorisniciController@UserExists');
+Route::post('/korisnik/dodaj', 'KorisniciController@dodajKorisnik');
+Route::post('/korisnik/izmeni', 'KorisniciController@izmeniKorisnik');
+Route::post('/korisnik/izbrisi', 'KorisniciController@izbrisiKorisnik');
+Route::get('/korisnici/UserGetKorisnik/{k_id}', 'KorisniciController@getUserKorisnik');

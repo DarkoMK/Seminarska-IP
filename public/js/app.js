@@ -21,6 +21,11 @@ $(document).ready(function() {
     });
 });
 
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
 class Errors {
 
     constructor() {
@@ -196,12 +201,12 @@ Vue.component('infoblock', {
             }
         },
         vkluciUred(){
-            axios.post('/naredbi/ured/vkluci/', {
+            axios.post('/naredbi/ured/vkluci', {
                 id_ured: this.devid,
             });
         },
         iskluciUred(){
-            axios.post('/naredbi/ured/iskluci/', {
+            axios.post('/naredbi/ured/iskluci', {
                 id_ured: this.devid,
             });
         }
@@ -215,11 +220,11 @@ Vue.component('infoblock', {
     }
 });
 
-if(window.location.pathname == "/pocetna")
+if(window.location.pathname.indexOf("/pocetna") == 0)
     new Vue({
     el: '#listdev'
     });
-if(window.location.pathname == "/naredbi")
+if(window.location.pathname.indexOf("/naredbi") == 0)
     new Vue({
         el: '#listnaredbi',
         data:{
@@ -262,10 +267,14 @@ if(window.location.pathname == "/naredbi")
                 var vk = vreme_vklucuvanje.split(' ');
                 var vi = vreme_isklucuvanje.split(' ');
                 $("input[name=v_vklucuvanje_submit]").val(vk[0]);
+                document.getElementsByName("v_vklucuvanje")[0].placeholder=vk[0];
                 $("input[name=v_vklucuvanje]").val(vk[0]);
+                document.getElementsByName("t_vklucuvanje")[0].placeholder=vk[1];
                 $("input[name=t_vklucuvanje]").val(vk[1]);
                 $("input[name=v_isklucuvanje_submit]").val(vi[0]);
+                document.getElementsByName("v_isklucuvanje")[0].placeholder=vi[0];
                 $("input[name=v_isklucuvanje]").val(vi[0]);
+                document.getElementsByName("t_isklucuvanje")[0].placeholder=vi[1];
                 $("input[name=t_isklucuvanje]").val(vi[1]);
 
                 this.edit = true;
@@ -309,7 +318,7 @@ if(window.location.pathname == "/naredbi")
             saveToDB(){
                 this.dodaj = false;
                 this.edit = false;
-                axios.post('/naredbi/nova/', {
+                axios.post('/naredbi/nova', {
                     id_ured: this.naredba.ured_id,
                     timeStrv: this.timeStrv,
                     timeStri: this.timeStri
@@ -321,7 +330,7 @@ if(window.location.pathname == "/naredbi")
             saveEditToDB(){
                 this.dodaj = false;
                 this.edit = false;
-                axios.post('/naredbi/edit/', {
+                axios.post('/naredbi/edit', {
                     id_naredba: this.nar_id,
                     id_ured: this.naredba.ured_id,
                     timeStrv: this.timeStrv,
@@ -356,5 +365,145 @@ if(window.location.pathname == "/naredbi")
         created: function () {
             this.getNaredbi();
             this.setSrvTime();
+        }
+    });
+
+new Vue({
+    el: '#headerdiv',
+    data:{
+        showPwForm: false,
+        l1: null,
+        l2: null
+    },
+    methods:{
+        zacuvajLozinka(){
+            if(this.l1 && this.l2){
+                if(this.l1 == this.l2){
+                    axios.post('/korisnik/promeniLozinka', {
+                        nova_lozinka: this.l1
+                    })  .then(function (response) {
+                        Materialize.toast('Лозинката е усптешно променета!', 4000);
+                        this.showPwForm = false;
+                    })
+                        .catch(function (error) {
+                            Materialize.toast('Се случи грешка!', 4000);
+                            this.showPwForm = false;
+                        });
+                }else{
+                    Materialize.toast('Грешка. Лозинките мора да се совпаѓаат!', 4000);
+                    this.showPwForm = false;
+                }
+            }else{
+                Materialize.toast('Грешка. Морате да внесете лозинка!', 4000);
+                this.showPwForm = false;
+            }
+        }
+    }
+});
+
+if(window.location.pathname.indexOf("/korisnici") == 0)
+    new Vue({
+        el: '#listkorisnici',
+        data:{
+            dodaj: false,
+            form: new Form(),
+            korisnici: null,
+            kime: null,
+            kemail: null,
+            kpw: null,
+            editK: false,
+            kid: null
+        },
+        methods:{
+            resetForm(){
+                /*$("input[name=ime]").val('');
+                $("input[name=email]").val('');
+                $("input[name=password]").val('');*/
+                this.kid = null;
+                this.kime = null;
+                this.kemail = null;
+                this.kpw = null;
+            },
+            getKorisnici(){
+                this.form.get('/korisnici/UserGetAllKorisnici').then(response => {
+                    if(response) {
+                        this.korisnici = response;
+                    }});
+            },
+            zacuvajKorisnik(kid){
+                if(this.kime && this.kemail && (this.kpw || this.editK)){
+                    if(validateEmail(this.kemail)){
+                        if(!this.editK){
+                        this.form.get('/korisnici/UserExists/' + this.kemail).then(response => {
+                            if(response) {
+                               if(!response.postoi){
+                                   axios.post('/korisnik/dodaj', {
+                                       ime: this.kime,
+                                       email: this.kemail,
+                                       lozinka: this.kpw
+                                   })  .then(function (response) {
+                                       Materialize.toast('Корисникот е додаден!', 4000);
+                                   }).catch(function (error) {
+                                           Materialize.toast('Се случи грешка!', 4000);
+                                           console.log(error);
+                                       });
+                                   this.getKorisnici();
+                                   this.resetForm();
+                               }
+                               else{
+                                   Materialize.toast('Грешка. e-mail-ot постои!', 4000);
+                               }
+                            }});
+                        }else{
+                            axios.post('/korisnik/izmeni', {
+                                id: this.kid,
+                                ime: this.kime,
+                                email: this.kemail,
+                                lozinka: this.kpw
+                            })  .then(function (response) {
+                                Materialize.toast('Корисникот е изменет!', 4000);
+                            }).catch(function (error) {
+                                Materialize.toast('Се случи грешка!', 4000);
+                                console.log(error);
+                            });
+                            this.getKorisnici();
+                            this.resetForm();
+                            this.dodaj = false;
+                        }
+                    }
+                    else{
+                        Materialize.toast('Грешка. e-mail-ot е невалиден!', 4000);
+                    }
+                }else{
+                    Materialize.toast('Грешка. Пополнете се!', 4000);
+                }
+            },
+            izbrisiUser(kid){
+                axios.post('/korisnik/izbrisi', {
+                    k_id: kid
+                })  .then(function (response) {
+                    Materialize.toast('Корисникот е избришан!', 4000);
+                }).catch(function (error) {
+                    Materialize.toast('Се случи грешка!', 4000);
+                    console.log(error);
+                });
+                this.getKorisnici();
+            },
+            editUser(kid){
+                this.form.get('/korisnici/UserGetKorisnik/' + kid).then(response => {
+                    if(response) {
+                        this.kid = response[0].id;
+                        this.kime = response[0].name;
+                        this.kemail = response[0].email;
+                        this.editK = true;
+                        this.dodaj = true;
+                    }}).catch(function (error) {
+                        Materialize.toast('Се случи грешка!', 4000);
+                    console.log(error);
+                });
+            }
+        },
+        created(){
+            this.getKorisnici();
         }
     });

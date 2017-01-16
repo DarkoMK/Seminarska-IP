@@ -4,7 +4,7 @@
       <title>Vkluci.MK - Најава</title>
       <link rel="icon" href="images/favicon-32x32.png" sizes="32x32">
       <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="/css/icon.css" rel="stylesheet">
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href="/css/app.css"  media="screen,projection"/>
       <!--Let browser know website is optimized for mobile-->

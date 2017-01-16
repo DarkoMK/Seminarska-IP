@@ -10,7 +10,7 @@
       <title>{{ $title }}</title>
       <link rel="icon" href="images/favicon-32x32.png" sizes="32x32">
       <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="/css/icon.css" rel="stylesheet">
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href="/css/app.css"  media="screen,projection"/>
       <link href="/css/ikonki.css" type="text/css" rel="stylesheet" media="screen,projection">

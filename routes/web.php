@@ -61,3 +61,9 @@ Route::delete('/kukji/ured/izbrisi', 'KukjiController@izbrisiKukjaUred');
 Route::put('/kukji/dodaj', 'KukjiController@zacuvajNovaKukja');
 
 Route::get('/kukji/postoi/{ime}', 'KukjiController@kImePostoi');
+
+Route::resource('admin/pomos', 'Admin\\PomosController');
+Route::resource('admin/soba', 'Admin\\SobaController');
+Route::resource('admin/kategorija', 'Admin\\KategorijaController');
+Route::resource('admin/admini', 'Admin\\AdminiController');
+Route::resource('aktivnosti', 'Admin\\AktivnostiController');

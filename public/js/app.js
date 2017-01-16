@@ -372,9 +372,14 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
                 axios.post('/naredbi/izbrisi', {
                     id_ured: id_ured,
                     naredba_id: id_naredba
+                }).then(function (response) {
+                    Materialize.toast('Наредбата е избришана.', 4000);
+                }).catch(function (error) {
+                    Materialize.toast('Се случи грешка!', 4000);
+                    console.log(error);
                 });
                 this.getNaredbi();
-                Materialize.toast('Наредбата е избришана.', 4000);
+
             },
             addClick(){
                 this.dodaj ? this.dodaj=false:this.dodaj=true;
@@ -532,7 +537,7 @@ if(window.location.pathname.indexOf("/korisnici") == 0)
         }
     });
 
-if(window.location.pathname.indexOf("/kukji") == 0)
+if(window.location.pathname == '/kukji')
     new Vue({
         el: '#kukjadodaj',
         data:{

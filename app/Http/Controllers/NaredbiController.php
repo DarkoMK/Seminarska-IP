@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Aktivnost;
 use App\Naredbi;
 use App\Ured;
 use Carbon\Carbon;
@@ -58,6 +59,12 @@ class NaredbiController extends Controller
             $ured = Ured::find($id_ured);
             $ured->vklucena_sostojba = 1;
             $ured->save();
+
+            $akt = new Aktivnost();
+            $akt->id_korisnik = Auth::user()->id;
+            $akt->description = Auth::user()->name." вклучи уред " . $ured->ime;
+            $akt->save();
+
         }else{
             abort(403, 'Недозволена акција!');
         }
@@ -75,6 +82,11 @@ class NaredbiController extends Controller
             $ured = Ured::find($id_ured);
             $ured->vklucena_sostojba = 0;
             $ured->save();
+
+            $akt = new Aktivnost();
+            $akt->id_korisnik = Auth::user()->id;
+            $akt->description = Auth::user()->name." исклучи уред " . $ured->ime;
+            $akt->save();
         }else{
             abort(403, 'Недозволена акција!');
         }
@@ -86,7 +98,7 @@ class NaredbiController extends Controller
         $naredbi = Naredbi::join('ured', 'naredbi.id_ured', '=', 'ured.id')
             ->join('kukja', 'kukja.id', '=', 'ured.id_kukja')
             ->join('kukja_korisnik', 'kukja_korisnik.id_kukja', '=', 'kukja.id')
-        ->where('kukja_korisnik.id_korisnik', $userid)->where('naredbi.na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured.soba')->get();
+        ->select('naredbi.id', 'naredbi.id_ured', 'naredbi.id_korisnik', 'naredbi.na_tajmer', 'naredbi.vreme_vklucuvanje', 'naredbi.vreme_isklucuvanje')->where('kukja_korisnik.id_korisnik', $userid)->where('naredbi.na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured.soba')->groupBy('naredbi.id')->get();
         return $naredbi;
     }
 
@@ -117,6 +129,11 @@ class NaredbiController extends Controller
             $naredba->vreme_vklucuvanje = request('timeStrv');
             $naredba->vreme_isklucuvanje =request('timeStri');
             $naredba->save();
+
+            $akt = new Aktivnost();
+            $akt->id_korisnik = Auth::user()->id;
+            $akt->description = Auth::user()->name." додаде наредба за уред  " . $id_ured;
+            $akt->save();
         }else{
             abort(403, 'Недозволена акција!');
         }
@@ -132,6 +149,11 @@ class NaredbiController extends Controller
             $naredba->vreme_vklucuvanje = request('timeStrv');
             $naredba->vreme_isklucuvanje =request('timeStri');
             $naredba->save();
+
+            $akt = new Aktivnost();
+            $akt->id_korisnik = Auth::user()->id;
+            $akt->description = Auth::user()->name." измени наредба за уред  " . $id_ured;
+            $akt->save();
         }else{
             abort(403, 'Недозволена акција!');
         }
@@ -141,7 +163,11 @@ class NaredbiController extends Controller
         $id_ured = request('id_ured');
         $naredba_id = request('naredba_id');
         if ($this->isOwner($id_ured)){
-            Naredbi::find($naredba_id)->delete();
+            Naredbi::where('id', $naredba_id)->delete();
+            $akt = new Aktivnost();
+            $akt->id_korisnik = Auth::user()->id;
+            $akt->description = Auth::user()->name." избриша наредба за уред " . $id_ured;
+            $akt->save();
         }else{
             abort(403, 'Недозволена акција!');
         }

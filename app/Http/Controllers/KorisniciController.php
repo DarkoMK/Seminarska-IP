@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Aktivnost;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KorisniciController extends Controller
 {
@@ -37,10 +39,21 @@ class KorisniciController extends Controller
         $user->email = request('email');
         $user->password = bcrypt(request('lozinka'));
         $user->save();
+
+        $akt = new Aktivnost();
+        $akt->id_korisnik = Auth::user()->id;
+        $akt->description = Auth::user()->name." додаде нов корисник " . $user->name;
+        $akt->save();
     }
 
     public function izbrisiKorisnik(){
-        User::find(request('k_id'))->delete();
+        $u = User::find(request('k_id'));
+        $akt = new Aktivnost();
+        $akt->id_korisnik = Auth::user()->id;
+        $akt->description = Auth::user()->name." избриша корисник " . $u->name;
+        $akt->save();
+
+        $u->delete();
     }
 
     public function getUserKorisnik($k_id){
@@ -54,5 +67,10 @@ class KorisniciController extends Controller
         if(request('lozinka'))
         $user->password = bcrypt(request('lozinka'));
         $user->save();
+
+        $akt = new Aktivnost();
+        $akt->id_korisnik = Auth::user()->id;
+        $akt->description = Auth::user()->name." направи измена на корисник " . $user->name;
+        $akt->save();
     }
 }

@@ -18,7 +18,7 @@ class CreateAktivnostiTable extends Migration
             $table->integer('id', true);
             $table->integer('id_korisnik');
             $table->string('description');
-            $table->timestamp('vreme');
+            $table->timestamp('vreme')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

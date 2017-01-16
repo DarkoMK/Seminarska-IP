@@ -61,6 +61,3 @@ Route::delete('/kukji/ured/izbrisi', 'KukjiController@izbrisiKukjaUred');
 Route::put('/kukji/dodaj', 'KukjiController@zacuvajNovaKukja');
 
 Route::get('/kukji/postoi/{ime}', 'KukjiController@kImePostoi');
-
-Route::get('/podesuvanja/getAdminiAll', 'PodesuvanjaController@getAdmini');
-Route::get('/podesuvanja/getAdmin/{id_user}', 'PodesuvanjaController@getAdmin');

@@ -3,11 +3,12 @@
 @section('main')
     <br>
     <div id="listkorisnici">
-    <h1 style="margin-left: 15%"><span class="icon"><i  aria-hidden="true" class="icon-korisnici" title="Корисници"></i></span>Корисници<a class="waves-effect waves-light btn brown darken-4 right" @click.prevent="dodaj ? dodaj=false:dodaj=true"><i class="material-icons">library_add</i></a></h1>
+    <h1 style="margin-left: 15%"><span class="icon"><i  aria-hidden="true" class="icon-korisnici" title="Корисници"></i></span>Корисници<a class="waves-effect waves-light btn brown darken-4 right" @click.prevent="addClick()"><i class="material-icons">library_add</i></a></h1>
     <hr width="85%" class="right"><br>
     <transition name="slide-fade">
         <div id="row" v-show="dodaj">
-            <h4>Додај Корисник</h4>
+            <h4><template v-if="editK">Измени</template>
+                <template v-else>Додај</template> Корисник</h4>
             <hr>
             <form class="col s12 m12 l12">
                 <div class="row">

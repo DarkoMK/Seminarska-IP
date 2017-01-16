@@ -9,7 +9,7 @@ class Kukja extends Model
     protected $table = 'kukja';
     public $timestamps = false;
 
-    public function korisnici()
+    public function kukjakorisnik()
     {
         return $this->hasMany('App\KukjaKorisnik', 'id_kukja');
     }

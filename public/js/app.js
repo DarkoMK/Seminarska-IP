@@ -216,7 +216,7 @@ Vue.component('infoblock', {
 
         setInterval(function () {
             this.setInfo();
-        }.bind(this), 1000);
+        }.bind(this), 2000);
     }
 });
 
@@ -261,21 +261,25 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
               }});
               this.getUredi();
             },
-            editNaredba(id_naredba, id_ured, vreme_vklucuvanje, vreme_isklucuvanje){
+            editNaredba(id_naredba, id_ured, vrk, vri){
                 this.naredba.ured_id = id_ured;
                 this.nar_id = id_naredba;
-                var vk = vreme_vklucuvanje.split(' ');
-                var vi = vreme_isklucuvanje.split(' ');
-                $("input[name=v_vklucuvanje_submit]").val(vk[0]);
-                document.getElementsByName("v_vklucuvanje")[0].placeholder=vk[0];
-                $("input[name=v_vklucuvanje]").val(vk[0]);
-                document.getElementsByName("t_vklucuvanje")[0].placeholder=vk[1];
-                $("input[name=t_vklucuvanje]").val(vk[1]);
-                $("input[name=v_isklucuvanje_submit]").val(vi[0]);
-                document.getElementsByName("v_isklucuvanje")[0].placeholder=vi[0];
-                $("input[name=v_isklucuvanje]").val(vi[0]);
-                document.getElementsByName("t_isklucuvanje")[0].placeholder=vi[1];
-                $("input[name=t_isklucuvanje]").val(vi[1]);
+                if(vrk){
+                    var vk = vrk.split(' ');
+                    $("input[name=v_vklucuvanje_submit]").val(vk[0]);
+                    document.getElementsByName("v_vklucuvanje")[0].placeholder=vk[0];
+                    $("input[name=v_vklucuvanje]").val(vk[0]);
+                    document.getElementsByName("t_vklucuvanje")[0].placeholder=vk[1];
+                    $("input[name=t_vklucuvanje]").val(vk[1]);
+                }
+                if(vri){
+                    var vi = vri.split(' ');
+                    $("input[name=v_isklucuvanje_submit]").val(vi[0]);
+                    document.getElementsByName("v_isklucuvanje")[0].placeholder=vi[0];
+                    $("input[name=v_isklucuvanje]").val(vi[0]);
+                    document.getElementsByName("t_isklucuvanje")[0].placeholder=vi[1];
+                    $("input[name=t_isklucuvanje]").val(vi[1]);
+                }
 
                 this.edit = true;
                 this.dodaj = true;
@@ -353,6 +357,16 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
                 $("input[name=v_isklucuvanje_submit]").val('');
                 $("input[name=v_isklucuvanje]").val('');
                 $("input[name=t_isklucuvanje]").val('');
+                    this.naredba.ured_id = null;
+                    this.naredba.ured_ime = null;
+                    this.naredba.d_vk = null;
+                    this.naredba.t_vk = null;
+                    this.naredba.d_isk = null;
+                    this.naredba.t_isk = null;
+                document.getElementsByName("v_vklucuvanje")[0].placeholder='';
+                document.getElementsByName("v_isklucuvanje")[0].placeholder='';
+                document.getElementsByName("t_vklucuvanje")[0].placeholder='';
+                document.getElementsByName("t_isklucuvanje")[0].placeholder='';
             },
             izbrisiNaredba(id_naredba, id_ured){
                 axios.post('/naredbi/izbrisi', {
@@ -360,6 +374,11 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
                     naredba_id: id_naredba
                 });
                 this.getNaredbi();
+                Materialize.toast('Наредбата е избришана.', 4000);
+            },
+            addClick(){
+                this.dodaj ? this.dodaj=false:this.dodaj=true;
+                this.resetForm();
             }
         },
         created: function () {
@@ -382,7 +401,7 @@ new Vue({
                     axios.post('/korisnik/promeniLozinka', {
                         nova_lozinka: this.l1
                     })  .then(function (response) {
-                        Materialize.toast('Лозинката е усптешно променета!', 4000);
+                        Materialize.toast('Лозинката е успешно променета!', 4000);
                         this.showPwForm = false;
                     })
                         .catch(function (error) {
@@ -412,7 +431,7 @@ if(window.location.pathname.indexOf("/korisnici") == 0)
             kemail: null,
             kpw: null,
             editK: false,
-            kid: null
+            kid: null,
         },
         methods:{
             resetForm(){
@@ -423,6 +442,7 @@ if(window.location.pathname.indexOf("/korisnici") == 0)
                 this.kime = null;
                 this.kemail = null;
                 this.kpw = null;
+                this.editK = false;
             },
             getKorisnici(){
                 this.form.get('/korisnici/UserGetAllKorisnici').then(response => {
@@ -501,9 +521,43 @@ if(window.location.pathname.indexOf("/korisnici") == 0)
                         Materialize.toast('Се случи грешка!', 4000);
                     console.log(error);
                 });
+            },
+            addClick(){
+                this.dodaj ? this.dodaj=false:this.dodaj=true;
+                this.resetForm();
             }
         },
         created(){
             this.getKorisnici();
+        }
+    });
+
+if(window.location.pathname.indexOf("/kukji") == 0)
+    new Vue({
+        el: '#kukjadodaj',
+        data:{
+            dodaj: false,
+            kime: null
+        },
+        methods:{
+            zacuvajKukja(){
+
+                axios.get('/kukji/postoi/' + this.kime).then(response => {
+                    if(response) {
+                        if(response.data.postoi == 0){
+                            axios.put('/kukji/dodaj', {
+                                ime: this.kime
+                            })  .then(function (response) {
+                                Materialize.toast('Куќата е додадена!', 4000);
+                                location.reload();
+                            }).catch(function (error) {
+                                Materialize.toast('Се случи грешка!', 4000);
+                                console.log(error);
+                            });
+                        }else{
+                            Materialize.toast('Името постои!', 4000);
+                        }
+                    }});
+            }
         }
     });

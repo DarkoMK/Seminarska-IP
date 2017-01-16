@@ -46,3 +46,21 @@ Route::post('/korisnik/dodaj', 'KorisniciController@dodajKorisnik');
 Route::post('/korisnik/izmeni', 'KorisniciController@izmeniKorisnik');
 Route::post('/korisnik/izbrisi', 'KorisniciController@izbrisiKorisnik');
 Route::get('/korisnici/UserGetKorisnik/{k_id}', 'KorisniciController@getUserKorisnik');
+
+Route::get('/kukji/izbrisi/{id_kukja}', 'KukjiController@izbrisiKukja');
+Route::get('/kukji/izmeni/{id_kukja}', 'KukjiController@izmeniKukja');
+Route::patch('/kukji/zacuvaj', 'KukjiController@zacuvajKukja');
+Route::delete('/kukji/korisnik/izbrisi', 'KukjiController@izbrisiKukjaKorisnik');
+Route::get('/kukji/korisnik/dodaj/{id_kukja}', 'KukjiController@dodajKukjaKorisnik');
+Route::put('/kukji/korisnik/dodaj', 'KukjiController@zacuvajKukjaKorisnik');
+
+Route::put('/kukji/ured/dodaj', 'KukjiController@zacuvajKukjaUred');
+Route::get('/kukji/ured/dodaj/{id_kukja}', 'KukjiController@dodajKukjaUred');
+Route::delete('/kukji/ured/izbrisi', 'KukjiController@izbrisiKukjaUred');
+
+Route::put('/kukji/dodaj', 'KukjiController@zacuvajNovaKukja');
+
+Route::get('/kukji/postoi/{ime}', 'KukjiController@kImePostoi');
+
+Route::get('/podesuvanja/getAdminiAll', 'PodesuvanjaController@getAdmini');
+Route::get('/podesuvanja/getAdmin/{id_user}', 'PodesuvanjaController@getAdmin');

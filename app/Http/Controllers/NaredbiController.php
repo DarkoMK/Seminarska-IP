@@ -83,7 +83,10 @@ class NaredbiController extends Controller
     public function getUserNaredbi(){
         $userid = Auth::user()->id;
         $current_time = Carbon::now();
-        $naredbi = Naredbi::where('id_korisnik', $userid)->where('na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured', 'ured.soba')->get();
+        $naredbi = Naredbi::join('ured', 'naredbi.id_ured', '=', 'ured.id')
+            ->join('kukja', 'kukja.id', '=', 'ured.id_kukja')
+            ->join('kukja_korisnik', 'kukja_korisnik.id_kukja', '=', 'kukja.id')
+        ->where('kukja_korisnik.id_korisnik', $userid)->where('naredbi.na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured.soba')->get();
         return $naredbi;
     }
 

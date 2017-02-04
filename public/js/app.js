@@ -216,7 +216,7 @@ Vue.component('infoblock', {
 
         setInterval(function () {
             this.setInfo();
-        }.bind(this), 2000);
+        }.bind(this), 1300);
     }
 });
 
@@ -241,7 +241,7 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
                 d_isk: null,
                 t_isk: null
             }],
-            serverTime: null,
+            serverTime: '',
             timeStrv: null,
             timeStri: null,
             nar_id: null
@@ -389,6 +389,9 @@ if(window.location.pathname.indexOf("/naredbi") == 0)
         created: function () {
             this.getNaredbi();
             this.setSrvTime();
+            setInterval(function () {
+                this.setSrvTime();
+            }.bind(this), 60000);
         }
     });
 

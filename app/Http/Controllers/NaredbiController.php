@@ -36,6 +36,11 @@ class NaredbiController extends Controller
     public function getUredStatusVK(Request $request, $id_ured){
         $current_time = Carbon::now();
         $uredStatus = Naredbi::where('id_ured', $id_ured)->whereNotNull('vreme_vklucuvanje')->orderBy('vreme_vklucuvanje', 'desc')->with('dal_naredba', 'ured')->first();
+//        $uredStatus = Ured::select('ured.vklucena_sostojba', 'naredbi.vreme_vklucuvanje', 'users.name')
+//            ->where('ured.id', $id_ured)
+//            ->join('naredbi', 'naredbi.id_ured', '=', 'ured.id')
+//            ->join('users', 'users.id', '=', 'naredbi.id_korisnik')
+//            ->orderBy('naredbi.vreme_vklucuvanje', 'desc')->first();
         return compact('uredStatus', 'current_time');
     }
 
@@ -98,7 +103,7 @@ class NaredbiController extends Controller
         $naredbi = Naredbi::join('ured', 'naredbi.id_ured', '=', 'ured.id')
             ->join('kukja', 'kukja.id', '=', 'ured.id_kukja')
             ->join('kukja_korisnik', 'kukja_korisnik.id_kukja', '=', 'kukja.id')
-        ->select('naredbi.id', 'naredbi.id_ured', 'naredbi.id_korisnik', 'naredbi.na_tajmer', 'naredbi.vreme_vklucuvanje', 'naredbi.vreme_isklucuvanje')->where('kukja_korisnik.id_korisnik', $userid)->where('naredbi.na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured.soba')->groupBy('naredbi.id')->get();
+        ->select('naredbi.id', 'naredbi.id_ured', 'naredbi.id_korisnik', 'naredbi.na_tajmer', 'naredbi.vreme_vklucuvanje', 'naredbi.vreme_isklucuvanje')->where('kukja_korisnik.id_korisnik', $userid)->where('naredbi.na_tajmer', 1)->where('vreme_vklucuvanje', '>', $current_time)->orWhere('vreme_isklucuvanje', '>', $current_time)->with('ured.soba')->groupBy('naredbi.id', 'naredbi.id_ured', 'naredbi.id_korisnik', 'naredbi.na_tajmer', 'naredbi.vreme_vklucuvanje', 'naredbi.vreme_isklucuvanje')->get();
         return $naredbi;
     }
 

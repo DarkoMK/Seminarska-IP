@@ -38,8 +38,8 @@
                                         </div>
                                         <div class="col l5">
                                             <div style="text-align: left">
-                                                <p v-if="u_status && v_vreme_vklucuvanje" style="font-size: 1em;">Вклучено од @{{ v_ime }} <br>на @{{ v_vreme_vklucuvanje }}</p>
-                                                <p v-if="!u_status && i_vreme_isklucuvanje" style="font-size: 1em;">Исклучено од @{{ i_ime }} <br>на @{{ i_vreme_isklucuvanje }}</p>
+                                                <p v-if="u_status && v_vreme_vklucuvanje && !v_idno" style="font-size: 1em;">Вклучено од @{{ v_ime }} <br>на @{{ v_vreme_vklucuvanje }}</p>
+                                                <p v-if="!u_status && i_vreme_isklucuvanje && !i_idno" style="font-size: 1em;">Исклучено од @{{ i_ime }} <br>на @{{ i_vreme_isklucuvanje }}</p>
                                                 <p v-if="!u_status && v_idno" style="font-size: 1em;">Ќе се вклучи на<br> @{{ v_vreme_vklucuvanje }}, од @{{ v_ime }}</p>
                                                 <p v-if="u_status && i_idno" style="font-size: 1em;">Ќе се исклучи на<br> @{{ i_vreme_isklucuvanje }}, од @{{ i_ime }}</p>
                                             </div>

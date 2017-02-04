@@ -47,16 +47,15 @@
                                     </p>
                               </div>
                             </div>
-
-                            <div class="row">
                             @if (count($errors) > 0)
+                            <div class="row">
                               <div class="col s12">
                                 @foreach($errors->all() as $error)
                                 <p class="center card" style="color: #ffe0b2;">{{ $error }}</p>
                                 @endforeach
                               </div>
-                            @endif
                             </div>
+                            @endif
 
                             <div class="row">
                               <button class="btn waves-effect waves-light" type="submit" name="action" style="background-color:#795548;">Најава

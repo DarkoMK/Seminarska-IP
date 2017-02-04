@@ -5,7 +5,8 @@
     <br>
     <div id="listnaredbi">
     <h1 style="margin-left: 15%"><span class="icon"><i  aria-hidden="true" class="icon-saatce" title="Наредби"></i></span>Наредби<a class="waves-effect waves-light btn brown darken-4 right" @click.prevent="addClick()"><i class="material-icons">library_add</i></a></h1>
-    <hr width="85%" class="right"><br>
+        <p style="margin-left: 15%">Моментално време на сервер - @{{ serverTime.slice(0,-3) }}</p>
+        <hr width="85%" class="right"><br>
         <transition name="slide-fade">
 <div id="row" v-show="dodaj">
         <h4>Додај наредба</h4>
